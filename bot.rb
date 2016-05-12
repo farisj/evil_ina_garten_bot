@@ -1,6 +1,5 @@
 # require "pry"
 require 'active_support/inflector'
-require_relative 'twitter_keys'
 require 'twitter'
 
 
@@ -36,10 +35,10 @@ def ina_sentence
 end
 
 client = Twitter::REST::Client.new do |config|
-  config.consumer_key = TWITTER_KEYS[:consumer_key]
-  config.consumer_secret = TWITTER_KEYS[:consumer_secret]
-  config.access_token = TWITTER_KEYS[:access_token]
-  config.access_token_secret = TWITTER_KEYS[:access_token_secret]
+  config.consumer_key = ENV['consumer_key']
+  config.consumer_secret = ENV['consumer_secret']
+  config.access_token = ENV['access_token']
+  config.access_token_secret = ENV['access_token_secret']
 end
 
 # client.update(ina_sentence)
