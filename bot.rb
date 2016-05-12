@@ -41,4 +41,4 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = ENV['access_token_secret']
 end
 
-# client.update(ina_sentence)
+client.update(ina_sentence)
