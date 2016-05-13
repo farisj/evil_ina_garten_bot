@@ -3,7 +3,7 @@ require 'active_support/inflector'
 require 'twitter'
 
 
-# exit unless ((Time.now.hour % 3) == 0)
+exit unless ((Time.now.hour % 3) == 0)
 
 def ina_sentence
   structures = open('lib/structures.txt').read.split("\n")
