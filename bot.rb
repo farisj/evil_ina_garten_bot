@@ -3,34 +3,39 @@ require 'active_support/inflector'
 require 'twitter'
 
 
-exit unless ((Time.now.hour % 3) == 0)
+# exit unless ((Time.now.hour % 3) == 0)
 
 def ina_sentence
   structures = open('lib/structures.txt').read.split("\n")
   ingredients = open('lib/ingredients.txt').read.split("\n")
   places = open('lib/places.txt').read.split("\n")
 
-  sentence = structures.sample
-  if sentence =~ /#\{place\}/
-    place = places.sample
-    sentence = sentence.gsub('#{place}', place)
-  end
-  if num_ingredients = sentence.scan(/#\{ingredient\}/)
-    ingredient_list = ingredients.sample(num_ingredients.count)
-    ingredient_list.each do |ingredient|
-      sentence = sentence.sub('#{ingredient}', ingredient)
+  sentence = "." * 141
+
+  structure = structures.sample
+  until sentence.length < 141 do
+    sentence = structure
+    if sentence =~ /#\{place\}/
+      place = places.sample
+      sentence = sentence.gsub('#{place}', place)
     end
+    if num_ingredients = sentence.scan(/#\{ingredient\}/)
+      ingredient_list = ingredients.sample(num_ingredients.count)
+      ingredient_list.each do |ingredient|
+        sentence = sentence.sub('#{ingredient}', ingredient)
+      end
+    end
+    if sentence =~ /#\{ingredients\}/
+      ingredient = ingredients.sample
+      sentence = sentence.gsub('#{ingredients}',ingredient.pluralize)
+    end
+    if sentence =~ /#\{same ingredient\}/
+      ingredient = ingredients.sample
+      sentence = sentence.gsub('#{same ingredient}',ingredient)
+    end
+    sentence[0] = sentence[0].upcase
+    sentence = sentence.gsub(',,',',').gsub(',.','.')
   end
-  if sentence =~ /#\{ingredients\}/
-    ingredient = ingredients.sample
-    sentence = sentence.gsub('#{ingredients}',ingredient.pluralize)
-  end
-  if sentence =~ /#\{same ingredient\}/
-    ingredient = ingredients.sample
-    sentence = sentence.gsub('#{same ingredient}',ingredient)
-  end
-  sentence[0] = sentence[0].upcase
-  sentence = sentence.gsub(',,',',').gsub(',.','.')
   sentence
 end
 
